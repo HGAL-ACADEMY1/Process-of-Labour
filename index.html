@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HGAL Academy: Process of Labour</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- RESET & BASE --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-deep: #0b0e11;
+            --bg-soft: #151a21;
+            --text-primary: #e0e6ed;
+            --text-secondary: #aebbc9;
+            --accent-blue: #64b5f6;
+            --accent-green: #81c784;
+            --accent-purple: #ba68c8;
+            --chat-bubble-bg: #1e242e;
+            --font-main: 'Merriweather', serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            background-image: radial-gradient(circle at 50% 0%, #1f2633 0%, var(--bg-deep) 70%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            font-size: 22px; /* Base mobile size */
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- SCROLL PROGRESS BAR --- */
+        #progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            width: 0%;
+            transition: width 0.1s ease-out;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 10px rgba(100, 181, 246, 0.5);
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 100px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* --- LOGO --- */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-top: 40px;
+            animation: fadeInDown 1.2s ease-out;
+        }
+
+        .logo-img {
+            max-width: 100%;
+            width: 350px;
+            height: auto;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.1));
+        }
+
+        /* --- TEXT STYLING --- */
+        .msg {
+            background: transparent;
+            padding: 10px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .msg.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Desktop specific size */
+        @media (min-width: 768px) {
+            body {
+                font-size: 26px;
+            }
+        }
+
+        strong {
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+
+        em {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .highlight {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        .warning {
+            color: #ffb74d; /* Soft Orange */
+        }
+
+        .transition-phrase {
+            font-size: 0.9em;
+            color: var(--accent-purple);
+            margin-top: 20px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            font-family: sans-serif; /* Contrast font for transitions */
+        }
+
+        /* --- VIP BUTTON --- */
+        .vip-container {
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(145deg, #1e242e, #161b22);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .vip-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 20px 50px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #0b0e11;
+            background: linear-gradient(90deg, #64b5f6, #ba68c8);
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 0 20px rgba(100, 181, 246, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: pulse 2s infinite;
+            font-family: sans-serif;
+        }
+
+        .vip-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(186, 104, 200, 0.6);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(100, 181, 246, 0.7); }
+            70% { transform: scale(1.03); box-shadow: 0 0 0 15px rgba(100, 181, 246, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(100, 181, 246, 0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Progress -->
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <div class="container">
+        <!-- Logo Header -->
+        <div class="logo-container">
+            <img src="https://i.imgur.com/eP0BFrd.png" alt="HGAL Academy Logo" class="logo-img">
+        </div>
+
+        <!-- Lecture Content -->
+
+        <div class="msg">
+            Hello there! 👋 Welcome to today's lecture. I'm so excited to guide you through this journey. Today, we are going to dive deep into the <strong>Process of Labour</strong>. 
+        </div>
+
+        <div class="msg">
+            Imagine childbirth as a huge, universal event—fundamental to human existence—but at the same time, it is a completely unique story for every single woman. 🌍🤰
+        </div>
+
+        <div class="msg">
+            As nurses, our role is crucial. We are the guardians of safety for both the mother and the baby. From the moment a woman walks into the healthcare agency, we start evaluating her. 
+        </div>
+
+        <div class="msg">
+            💡 <strong>Key Tip:</strong> It is critical to provide "anticipatory guidance." That's a fancy way of saying: Explain <em>everything</em> before you do it. Tell her what the procedure is (like checking the baby's heart rate), why you're giving medicine, and how it might feel. This lowers her anxiety immensely!
+        </div>
+
+        <div class="msg">
+            <div class="transition-phrase">Let's start with assessment</div>
+            So, how do we check on the mother? 🧐 We use various techniques to see how she is progressing.
+        </div>
+
+        <div class="msg">
+            First, we look at <strong>Vital Signs</strong>. This is temperature, blood pressure, pulse, respiration, and pain levels. We also need to peek at her prenatal record to see if there are any risks involved.
+        </div>
+
+        <div class="msg">
+            Here is the schedule you need to memorize for checking vital signs (blood pressure, pulse, respiration):<br>
+            🕑 <strong>Latent Phase:</strong> Every 4 hours.<br>
+            🕐 <strong>Active Phase:</strong> Every hour.<br>
+            ⏱️ <strong>Transition Phase:</strong> Every 15 to 30 minutes.
+        </div>
+
+        <div class="msg">
+            And for temperature? 🌡️ We check it every 4 hours. <strong>However</strong>, once the membranes rupture (the water breaks), we must check it every 1 to 2 hours to watch for infection.
+        </div>
+
+        <div class="msg">
+            <div class="transition-phrase">Let's move on to the Vaginal Examination</div>
+            Now, this is a skill that takes time and practice to master. In the US, most nurses in community hospitals do this because doctors aren't always in the room.
+        </div>
+
+        <div class="msg">
+            Why do we do it? 🤔 We are looking for five main things:<br>
+            1. <strong>Dilation:</strong> How open is the cervix?<br>
+            2. <strong>Effacement:</strong> How thin is the cervix?<br>
+            3. <strong>Membrane Status:</strong> Did the water break?<br>
+            4. <strong>Foetal Position:</strong> How is the baby sitting?<br>
+            5. <strong>Station:</strong> How far down has the baby dropped?
+        </div>
+
+        <div class="msg">
+            Before we start, we always explain the procedure to the woman to make her comfortable. She lies on her back. We gently insert the index and middle fingers. ✌️
+        </div>
+
+        <div class="msg">
+            🚿 <strong>Lubrication Rule:</strong> If we are checking membranes for the first time, we just use water. If the membranes have <em>already</em> ruptured, we use an antiseptic solution to prevent infection.
+        </div>
+
+        <div class="msg">
+            <div class="transition-phrase">Speaking of membranes...</div>
+            How do we know if the "water broke"? Sometimes it's a gush 🌊, sometimes just a trickle. We use a test called the <strong>Nitrazine Test</strong>.
+        </div>
+
+        <div class="msg">
+            Here is the science: Vaginal fluid is acidic, but amniotic fluid (the baby's water) is <strong>alkaline</strong>.
+        </div>
+
+        <div class="msg">
+            🧪 <strong>The Results:</strong><br>
+            🟡 <strong>Yellow/Olive Green (pH 5-6):</strong> Membranes likely intact (it's just vaginal fluid).<br>
+            🔵 <strong>Blue-Green/Deep Blue (pH 6.5-7.5):</strong> Membranes likely ruptured (it's amniotic fluid!).
+        </div>
+
+        <div class="msg">
+            ⚠️ <strong>Warning:</strong> Blood is also alkaline! So if there is a lot of "bloody show," you might get a false positive. If we aren't sure, we do a "Fern Test" under a microscope. Amniotic fluid dries in a pattern that looks like a fern leaf. 🌿
+        </div>
+
+        <div class="msg">
+            <div class="transition-phrase">Now let's talk about Power</div>
+            The primary power of labour is <strong>Uterine Contractions</strong>. These are involuntary muscles working hard!
+        </div>
+
+        <div class="msg">
+            Think of a contraction like a wave 🌊. It starts at the top (fundus) and moves down. It has three phases:<br>
+            1. <strong>Increment:</strong> Building up.<br>
+            2. <strong>Acme:</strong> The peak intensity (the strongest part).<br>
+            3. <strong>Decrement:</strong> Letting down.
+        </div>
+
+        <div class="msg">
+            We measure the intensity (how strong it is) in mmHg. <br>
+            💪 <strong>Mild:</strong> feels like the tip of your nose.<br>
+            💪 <strong>Moderate:</strong> feels like your chin.<br>
+            💪 <strong>Strong:</strong> feels like your forehead (hard!).
+        </div>
+
+        <div class="msg">
+            We can also monitor contractions electronically at home for high-risk moms. This involves wearing a belt sensor for an hour twice a day. However, interesting fact: Research shows this isn't actually very good at predicting preterm birth, even though we still do it sometimes. 🤷
+        </div>
+
+        <div class="msg">
+            <div class="transition-phrase">Let's look at the "Signs of Labour"</div>
+            How do we know labour is coming? There are "Premonitory Signs" (warning signs) that happen usually 2-3 weeks before term.
+        </div>
+
+        <div class="msg">
+            ⬇️ <strong>Lightening:</strong> This is when the uterus sinks downward. The baby's head drops into the pelvis. <br>
+            <em>Good news:</em> Breathing gets easier.<br>
+            <em>Bad news:</em> Walking gets harder and leg cramps might start due to pressure on the nerves.
+        </div>
+
+        <div class="msg">
+            🚽 <strong>Frequency of Micturition:</strong> Because the baby's head is pressing on the bladder, the mom has to pee constantly!
+        </div>
+
+        <div class="msg">
+            👻 <strong>False Pains (Spurious Labour):</strong> These are erratic, irregular contractions. They hurt, but they don't actually open the cervix. Usually, walking makes these pains go away!
+        </div>
+
+        <div class="msg">
+            <div class="transition-phrase">So, what are the TRUE signs?</div>
+            True labour means business! 💼 Here is how you tell the difference:
+        </div>
+
+        <div class="msg">
+            ✅ <strong>True Contractions:</strong> They get stronger, longer, and closer together. Walking makes them <em>worse</em>, not better. <br>
+            ✅ <strong>Dilation:</strong> The cervix actually opens. This is the most definite sign.<br>
+            ✅ <strong>The Show:</strong> A blood-stained mucus discharge (the mucus plug comes out).
+        </div>
+
+        <div class="msg">
+            <div class="transition-phrase">Now for the Mechanics</div>
+            This is the physics of birth—the <strong>Mechanism of Labour</strong>. It's a series of passive movements the baby makes to fit through the birth canal. 🧩
+        </div>
+
+        <div class="msg">
+            Let's define the key moves:<br>
+            🔹 <strong>Descent:</strong> The baby moving down throughout the whole process.<br>
+            🔹 <strong>Flexion:</strong> Baby tucks chin to chest (makes the head smaller to fit).<br>
+            🔹 <strong>Internal Rotation:</strong> The head twists to fit under the pubic bone.<br>
+            🔹 <strong>Extension:</strong> The head is born! It lifts up and out.<br>
+            🔹 <strong>Restitution:</strong> The head untwists to align with the shoulders.<br>
+            🔹 <strong>External Rotation:</strong> The head turns further as the shoulders rotate inside.
+        </div>
+
+        <div class="msg">
+            <div class="transition-phrase">Let's visualize a specific position: LOA</div>
+            <strong>Left Occipito Anterior (LOA)</strong> is a very common position. Let's walk through it step-by-step like a dance. 💃
+        </div>
+
+        <div class="msg">
+            1. <strong>Engagement:</strong> The baby's head enters the pelvis. The diameter is about 10cm (Sub-Occipito Frontal).
+        </div>
+
+        <div class="msg">
+            2. <strong>Flexion:</strong> The uterus pushes down, and the baby tucks its chin. This shrinks the diameter to 9.5cm (Sub-Occipito Bregmatic). Much easier to fit!
+        </div>
+
+        <div class="msg">
+            3. <strong>Internal Rotation:</strong> The back of the baby's head (occiput) hits the pelvic floor and rotates 1/8th of a circle forward. Now the head is looking straight down.
+        </div>
+
+        <div class="msg">
+            4. <strong>Crowning & Extension:</strong> The head slips under the pubic bone. The face sweeps over the perineum and... the head is born! 🎉
+        </div>
+
+        <div class="msg">
+            5. <strong>Restitution:</strong> The neck was twisted, so the head turns back to the left (towards the mother's thigh) to untwist.
+        </div>
+
+        <div class="msg">
+            6. <strong>Shoulder Rotation:</strong> Inside, the shoulders twist to fit. This causes the head outside to turn another 1/8th of a circle (External Rotation).
+        </div>
+
+        <div class="msg">
+            7. <strong>Lateral Flexion:</strong> The anterior shoulder slips under the pubic bone, the posterior shoulder passes over the perineum, and the whole body slips out sideways. Baby is here! 👶
+        </div>
+
+        <div class="msg">
+            And that, my friends, is the incredible journey of labour. It is complex, precise, and absolutely amazing.
+        </div>
+
+        <!-- VIP NOTICE -->
+        <div class="vip-container msg">
+            <p>Join our VIP if you're yet to, for more study materials and other bonuses (worth #115,000).</p>
+            <p style="margin-top: 15px;">For more details click below</p>
+            <div style="font-size: 30px; margin: 10px 0;">👇</div>
+            
+            <a href="https://tinyurl.com/2dbtvx2b" class="vip-btn" target="_blank">Click Here</a>
+        </div>
+
+    </div>
+
+    <script>
+        // Scroll Progress Bar Logic
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+        };
+
+        // Text Pop-in Animation Logic
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Optional: Stop observing once visible to save resources
+                    // observer.unobserve(entry.target); 
+                }
+            });
+        }, observerOptions);
+
+        const messages = document.querySelectorAll('.msg');
+        messages.forEach(msg => {
+            observer.observe(msg);
+        });
+    </script>
+</body>
+  </html>
